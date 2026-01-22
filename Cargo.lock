@@ -3,12 +3,6 @@
 version = 4
 
 [[package]]
-name = "adler2"
-version = "2.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
-
-[[package]]
 name = "aho-corasick"
 version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -199,21 +193,6 @@ checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
 dependencies = [
  "serde",
 ]
-
-[[package]]
-name = "bit-set"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08807e080ed7f9d5433fa9b275196cfc35414f66a0c79d864dc51a0d825231a3"
-dependencies = [
- "bit-vec",
-]
-
-[[package]]
-name = "bit-vec"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e764a1d40d510daf35e07be9eb06e75770908c27d411ee6c92109c9840eaaf7"
 
 [[package]]
 name = "bitflags"
@@ -409,7 +388,17 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ad7154afa56de2f290e3c82c2c6dc4f5b282b6870903f56ef3509aba95866edc"
 dependencies = [
- "const-serialize-macro",
+ "const-serialize-macro 0.7.2",
+ "serde",
+]
+
+[[package]]
+name = "const-serialize"
+version = "0.8.0"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "const-serialize 0.7.2",
+ "const-serialize-macro 0.8.0-alpha.0",
  "serde",
 ]
 
@@ -418,6 +407,16 @@ name = "const-serialize-macro"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4f160aad86b4343e8d4e261fee9965c3005b2fd6bc117d172ab65948779e4acf"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "const-serialize-macro"
+version = "0.8.0-alpha.0"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -513,15 +512,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "crc32fast"
-version = "1.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9481c1c90cbf2ac953f07c8d4a58aa3945c425b7185c9154d67a65e4230da511"
-dependencies = [
- "cfg-if",
 ]
 
 [[package]]
@@ -657,24 +647,49 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a115f9dbe5900c6044ee6a791e1b160c29989c6a8721eec099e01a964e5dae4"
 dependencies = [
- "dioxus-asset-resolver",
- "dioxus-cli-config",
- "dioxus-config-macro",
- "dioxus-config-macros",
- "dioxus-core",
- "dioxus-core-macro",
- "dioxus-devtools",
- "dioxus-document",
+ "dioxus-asset-resolver 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-config-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-config-macros 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-devtools 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-document 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-fullstack",
- "dioxus-history",
- "dioxus-hooks",
- "dioxus-html",
- "dioxus-logger",
- "dioxus-signals",
- "dioxus-stores",
- "dioxus-web",
- "manganis",
- "subsecond",
+ "dioxus-history 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-hooks 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-html 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-logger 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-stores 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-web 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "manganis 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "subsecond 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "warnings",
+]
+
+[[package]]
+name = "dioxus"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-asset-resolver 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-cli-config 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-config-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-config-macros 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-devtools 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-document 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-history 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-hooks 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-html 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-logger 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-signals 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-stores 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-web 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "manganis 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "subsecond 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "warnings",
 ]
 
@@ -684,7 +699,7 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6851ae49ba3988f1b77f6ef826eb142e811602129841c24bf5a4e103708d9844"
 dependencies = [
- "dioxus-cli-config",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 1.3.1",
  "infer",
  "jni",
@@ -700,10 +715,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-asset-resolver"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "jni",
+ "ndk",
+ "ndk-context",
+ "ndk-sys",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "dioxus-cli-config"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c59e9d9da2e7334fdae5d77e3989207aa549062f74ff1ca2171393bbdd7fda90"
+dependencies = [
+ "wasm-bindgen",
+]
+
+[[package]]
+name = "dioxus-cli-config"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
 dependencies = [
  "wasm-bindgen",
 ]
@@ -719,10 +754,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-config-macro"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "proc-macro2",
+ "quote",
+]
+
+[[package]]
 name = "dioxus-config-macros"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c49327465c2d434d00fb4c86bd35ae72155b479622e09352b950d9ab4807bf23"
+
+[[package]]
+name = "dioxus-config-macros"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
 
 [[package]]
 name = "dioxus-core"
@@ -732,17 +781,38 @@ checksum = "7400cbd21a98e585a13f8c29574da9b8afb2fd343f712618042b6c71761f0933"
 dependencies = [
  "anyhow",
  "const_format",
- "dioxus-core-types",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "longest-increasing-subsequence",
  "rustc-hash 2.1.1",
  "rustversion",
  "serde",
  "slab",
  "slotmap",
- "subsecond",
+ "subsecond 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tracing",
+]
+
+[[package]]
+name = "dioxus-core"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "anyhow",
+ "const_format",
+ "dioxus-core-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "longest-increasing-subsequence",
+ "rustc-hash 2.1.1",
+ "rustversion",
+ "serde",
+ "slab",
+ "slotmap",
+ "subsecond 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "tracing",
 ]
 
@@ -753,7 +823,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e51c0eb7eb76dd5a0b9a116d94d29ca78924a1ed1fcb7ea072eda5045d3ac056"
 dependencies = [
  "convert_case 0.8.0",
- "dioxus-rsx",
+ "dioxus-rsx 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "dioxus-core-macro"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "convert_case 0.8.0",
+ "dioxus-rsx 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "proc-macro2",
  "quote",
  "syn 2.0.108",
@@ -766,10 +848,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0652ab5f9c2c32261d44a3155debbfd909ed03d03434d7f70f5a796bf255c519"
 
 [[package]]
+name = "dioxus-core-types"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+
+[[package]]
 name = "dioxus-custom-components"
 version = "0.1.0"
 dependencies = [
- "dioxus",
+ "dioxus 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-markdown",
  "dioxus-ssr",
  "pretty_assertions",
@@ -781,13 +868,30 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9748128bcd102b10e58c765939807053ccab542206a939b8bab228077455c259"
 dependencies = [
- "dioxus-cli-config",
- "dioxus-core",
- "dioxus-devtools-types",
- "dioxus-signals",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-devtools-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "serde_json",
- "subsecond",
+ "subsecond 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror 2.0.17",
+ "tracing",
+ "tungstenite",
+]
+
+[[package]]
+name = "dioxus-devtools"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-cli-config 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-devtools-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-signals 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "serde",
+ "serde_json",
+ "subsecond 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "thiserror 2.0.17",
  "tracing",
  "tungstenite",
@@ -799,9 +903,19 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48540ca8a0ab1ec81cd4db35f0c9713d43b158647fc1dcb0d79965fc3b41d96c"
 dependencies = [
- "dioxus-core",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
- "subsecond-types",
+ "subsecond-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "dioxus-devtools-types"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "serde",
+ "subsecond-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
 ]
 
 [[package]]
@@ -810,14 +924,32 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "501a189b391d091c9aa02c05f5b25f5d0d17fa0e1016e000b0fdbb073d77cd6a"
 dependencies = [
- "dioxus-core",
- "dioxus-core-macro",
- "dioxus-core-types",
- "dioxus-html",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-html 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
- "lazy-js-bundle",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy-js-bundle 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "serde_json",
+ "tracing",
+]
+
+[[package]]
+name = "dioxus-document"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-html 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "lazy-js-bundle 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "serde",
  "serde_json",
  "tracing",
@@ -827,7 +959,7 @@ dependencies = [
 name = "dioxus-editor"
 version = "0.1.0"
 dependencies = [
- "dioxus",
+ "dioxus 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-markdown",
 ]
 
@@ -849,14 +981,14 @@ dependencies = [
  "const_format",
  "content_disposition",
  "derive_more",
- "dioxus-asset-resolver",
- "dioxus-cli-config",
- "dioxus-core",
+ "dioxus-asset-resolver 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-fullstack-core",
  "dioxus-fullstack-macro",
- "dioxus-hooks",
- "dioxus-html",
- "dioxus-signals",
+ "dioxus-hooks 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-html 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "form_urlencoded",
  "futures",
  "futures-channel",
@@ -898,14 +1030,14 @@ dependencies = [
  "axum-core",
  "base64",
  "ciborium",
- "dioxus-core",
- "dioxus-document",
- "dioxus-history",
- "dioxus-hooks",
- "dioxus-signals",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-document 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-history 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-hooks 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 1.3.1",
  "inventory",
  "parking_lot",
@@ -936,7 +1068,16 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "55d704b3ba9504cb3c9cde49499b75546d1faaff2736f4c368aca6c061c48ac3"
 dependencies = [
- "dioxus-core",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tracing",
+]
+
+[[package]]
+name = "dioxus-history"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "tracing",
 ]
 
@@ -946,11 +1087,26 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79c6d68be372eca8186a1c57ec49be67a6ea46022150b5e85ab6a6acde52d272"
 dependencies = [
- "dioxus-core",
- "dioxus-signals",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustversion",
+ "slab",
+ "tracing",
+]
+
+[[package]]
+name = "dioxus-hooks"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-signals 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "rustversion",
  "slab",
  "tracing",
@@ -964,18 +1120,41 @@ checksum = "3aa87ecfa0f38ec286be25789a7f2d6c30778111f1fbff563da4bae41d171496"
 dependencies = [
  "async-trait",
  "bytes",
- "dioxus-core",
- "dioxus-core-macro",
- "dioxus-core-types",
- "dioxus-hooks",
- "dioxus-html-internal-macro",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-hooks 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-html-internal-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "enumset",
  "euclid",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "keyboard-types",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustversion",
+ "tracing",
+]
+
+[[package]]
+name = "dioxus-html"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-hooks 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-html-internal-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "enumset",
+ "euclid",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "keyboard-types",
+ "lazy-js-bundle 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "rustversion",
  "tracing",
 ]
@@ -993,13 +1172,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-html-internal-macro"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "convert_case 0.8.0",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
 name = "dioxus-interpreter-js"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f5437a89d3ef7edfebc0f10acb065f1709cb7ffb678e3a4bb1416706d71f7c67"
 dependencies = [
  "js-sys",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-hash 2.1.1",
+ "sledgehammer_bindgen",
+ "sledgehammer_utils",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "dioxus-interpreter-js"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "js-sys",
+ "lazy-js-bundle 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "rustc-hash 2.1.1",
  "sledgehammer_bindgen",
  "sledgehammer_utils",
@@ -1014,7 +1219,18 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b25ebfbc193cebcf5af5e19b8ee7c6adee486fbd1c12f11aea058b464da16f9"
 dependencies = [
- "dioxus-cli-config",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tracing",
+ "tracing-subscriber",
+ "tracing-wasm",
+]
+
+[[package]]
+name = "dioxus-logger"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-cli-config 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "tracing",
  "tracing-subscriber",
  "tracing-wasm",
@@ -1024,7 +1240,7 @@ dependencies = [
 name = "dioxus-markdown"
 version = "0.1.0"
 dependencies = [
- "dioxus",
+ "dioxus 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "web-framework-markdown",
 ]
 
@@ -1032,7 +1248,7 @@ dependencies = [
 name = "dioxus-onclick"
 version = "0.1.0"
 dependencies = [
- "dioxus",
+ "dioxus 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-markdown",
 ]
 
@@ -1050,10 +1266,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-rsx"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "proc-macro2",
+ "proc-macro2-diagnostics",
+ "quote",
+ "rustversion",
+ "syn 2.0.108",
+]
+
+[[package]]
 name = "dioxus-showcase"
 version = "0.1.0"
 dependencies = [
- "dioxus",
+ "dioxus 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dioxus-markdown",
 ]
 
@@ -1063,10 +1291,25 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27fc4df7a31a7f02e5a0b40884bb66ee165226a05d75fce03baa44029e438762"
 dependencies = [
- "dioxus-core",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "parking_lot",
+ "rustc-hash 2.1.1",
+ "tracing",
+ "warnings",
+]
+
+[[package]]
+name = "dioxus-signals"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "parking_lot",
  "rustc-hash 2.1.1",
  "tracing",
@@ -1080,8 +1323,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "088efddedd39fc29d007bc91c8a61b25130355149ea5313469f96fb695c5e3ab"
 dependencies = [
  "askama_escape",
- "dioxus-core",
- "dioxus-core-types",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-hash 2.1.1",
 ]
 
@@ -1091,10 +1334,21 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2dec3cd677078824a733de25ddbe8e987cfc8d98aec29b7d199e1fdb8452b96"
 dependencies = [
- "dioxus-core",
- "dioxus-signals",
- "dioxus-stores-macro",
- "generational-box",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-stores-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "dioxus-stores"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-signals 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-stores-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
 ]
 
 [[package]]
@@ -1110,26 +1364,69 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-stores-macro"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "convert_case 0.8.0",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
 name = "dioxus-web"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "315009f3a77c3c813415b3b8a8ea62a4d7a32dde9a666664b30862d4386e8456"
 dependencies = [
- "dioxus-cli-config",
- "dioxus-core",
- "dioxus-core-types",
- "dioxus-devtools",
- "dioxus-document",
- "dioxus-history",
- "dioxus-html",
- "dioxus-interpreter-js",
- "dioxus-signals",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-devtools 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-document 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-history 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-html 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-interpreter-js 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-signals 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-channel",
  "futures-util",
- "generational-box",
+ "generational-box 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "gloo-timers 0.3.0",
  "js-sys",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-hash 2.1.1",
+ "send_wrapper",
+ "serde",
+ "serde-wasm-bindgen 0.6.5",
+ "serde_json",
+ "tracing",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "wasm-streams",
+ "web-sys",
+]
+
+[[package]]
+name = "dioxus-web"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dioxus-cli-config 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-devtools 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-document 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-history 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-html 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-interpreter-js 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-signals 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "futures-channel",
+ "futures-util",
+ "generational-box 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "gloo-timers 0.3.0",
+ "js-sys",
+ "lazy-js-bundle 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "rustc-hash 2.1.1",
  "send_wrapper",
  "serde",
@@ -1236,17 +1533,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fancy-regex"
-version = "0.16.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "998b056554fbe42e03ae0e152895cd1a7e1002aec800fdc6635d20270260c46f"
-dependencies = [
- "bit-set",
- "regex-automata",
- "regex-syntax",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1257,16 +1543,6 @@ name = "find-msvc-tools"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "52051878f80a721bb68ebfbc930e07b65ba72f2da88968ea5c06fd6ca3d3a127"
-
-[[package]]
-name = "flate2"
-version = "1.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfe33edd8e85a12a67454e37f8c75e730830d83e313556ab9ebf9ee7fbeb3bfb"
-dependencies = [
- "crc32fast",
- "miniz_oxide",
-]
 
 [[package]]
 name = "fnv"
@@ -1377,6 +1653,15 @@ name = "generational-box"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e658d10252a15200ca4a1c67c7180fc0baffa3f92869bbd903025daf6f70fd65"
+dependencies = [
+ "parking_lot",
+ "tracing",
+]
+
+[[package]]
+name = "generational-box"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
 dependencies = [
  "parking_lot",
  "tracing",
@@ -2244,6 +2529,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21972afec4627b7ba0de60b5269585b5ac2f56d559b0696f57eee6daf8a51b68"
 
 [[package]]
+name = "lazy-js-bundle"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+
+[[package]]
 name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2472,12 +2762,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "linked-hash-map"
-version = "0.5.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
-
-[[package]]
 name = "linux-raw-sys"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2539,9 +2823,20 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97c63ae68d25457a579b7714806088c5cb44c536cf624a53a17184878f9f0bcd"
 dependencies = [
- "const-serialize",
- "manganis-core",
- "manganis-macro",
+ "const-serialize 0.7.2",
+ "manganis-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "manganis-macro 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "manganis"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "const-serialize 0.7.2",
+ "const-serialize 0.8.0",
+ "manganis-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "manganis-macro 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
 ]
 
 [[package]]
@@ -2550,10 +2845,23 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "88d071660b149f985cbab8b23f2004ea6dd5cf947b63a0843f0e2f46e6af7229"
 dependencies = [
- "const-serialize",
- "dioxus-cli-config",
- "dioxus-core-types",
+ "const-serialize 0.7.2",
+ "dioxus-cli-config 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dioxus-core-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
+]
+
+[[package]]
+name = "manganis-core"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "const-serialize 0.7.2",
+ "const-serialize 0.8.0",
+ "dioxus-cli-config 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "dioxus-core-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
+ "serde",
+ "winnow 0.7.14",
 ]
 
 [[package]]
@@ -2564,7 +2872,20 @@ checksum = "9793d1d33778245b4240c330a8f575d208ce077c7e7bab1c79064252ddd4a162"
 dependencies = [
  "dunce",
  "macro-string",
- "manganis-core",
+ "manganis-core 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.108",
+]
+
+[[package]]
+name = "manganis-macro"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "dunce",
+ "macro-string",
+ "manganis-core 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "proc-macro2",
  "quote",
  "syn 2.0.108",
@@ -2653,16 +2974,6 @@ name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
-
-[[package]]
-name = "miniz_oxide"
-version = "0.8.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fa76a2c86f704bdb222d66965fb3d63269ce38518b83cb0575fca855ebb6316"
-dependencies = [
- "adler2",
- "simd-adler32",
-]
 
 [[package]]
 name = "mio"
@@ -2939,19 +3250,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "plist"
-version = "1.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "740ebea15c5d1428f910cd1a5f52cebf8d25006245ed8ade92702f4943d91e07"
-dependencies = [
- "base64",
- "indexmap",
- "quick-xml",
- "serde",
- "time",
-]
-
-[[package]]
 name = "potential_utf"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3154,15 +3452,6 @@ name = "pulldown-cmark-escape"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "007d8adb5ddab6f8e3f491ac63566a7d5002cc7ed73901f72057943fa71ae1ae"
-
-[[package]]
-name = "quick-xml"
-version = "0.38.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42a232e7487fc2ef313d96dde7948e7a3c05101870d8985e4fd8d26aedd27b89"
-dependencies = [
- "memchr",
-]
 
 [[package]]
 name = "quinn"
@@ -3711,12 +4000,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
-name = "simd-adler32"
-version = "0.3.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
-
-[[package]]
 name = "siphasher"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3796,6 +4079,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
+name = "streaming-iterator"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b2231b7c3057d5e4ad0156fb3dc807d900806020c5ffa3ee6ff2c8c76fb8520"
+
+[[package]]
 name = "strsim"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3834,7 +4123,25 @@ dependencies = [
  "memfd",
  "memmap2",
  "serde",
- "subsecond-types",
+ "subsecond-types 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror 2.0.17",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "subsecond"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
+dependencies = [
+ "js-sys",
+ "libc",
+ "libloading",
+ "memfd",
+ "memmap2",
+ "serde",
+ "subsecond-types 0.7.2 (git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove)",
  "thiserror 2.0.17",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -3846,6 +4153,14 @@ name = "subsecond-types"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d07aa455c66ddfdbb51507537402b961e027846468954ef8d974bce65dff9eb0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "subsecond-types"
+version = "0.7.2"
+source = "git+https://github.com/nikhiljha/dioxus?branch=fix%2Fclear-node-mapping-on-remove#4e2ebbb831891467545c3876f54aba8d8d864370"
 dependencies = [
  "serde",
 ]
@@ -3907,27 +4222,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.108",
-]
-
-[[package]]
-name = "syntect"
-version = "5.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "656b45c05d95a5704399aeef6bd0ddec7b2b3531b7c9e900abbf7c4d2190c925"
-dependencies = [
- "bincode",
- "fancy-regex",
- "flate2",
- "fnv",
- "once_cell",
- "plist",
- "regex-syntax",
- "serde",
- "serde_derive",
- "serde_json",
- "thiserror 2.0.17",
- "walkdir",
- "yaml-rust",
 ]
 
 [[package]]
@@ -4136,7 +4430,7 @@ dependencies = [
  "serde_spanned",
  "toml_datetime 0.6.11",
  "toml_write",
- "winnow 0.7.13",
+ "winnow 0.7.14",
 ]
 
 [[package]]
@@ -4148,7 +4442,7 @@ dependencies = [
  "indexmap",
  "toml_datetime 0.7.3",
  "toml_parser",
- "winnow 0.7.13",
+ "winnow 0.7.14",
 ]
 
 [[package]]
@@ -4157,7 +4451,7 @@ version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0cbe268d35bdb4bb5a56a2de88d0ad0eb70af5384a99d648cd4b3d04039800e"
 dependencies = [
- "winnow 0.7.13",
+ "winnow 0.7.14",
 ]
 
 [[package]]
@@ -4266,6 +4560,138 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "tree-sitter"
+version = "0.24.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a5387dffa7ffc7d2dae12b50c6f7aab8ff79d6210147c6613561fc3d474c6f75"
+dependencies = [
+ "cc",
+ "regex",
+ "regex-syntax",
+ "streaming-iterator",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-bash"
+version = "0.23.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "329a4d48623ac337d42b1df84e81a1c9dbb2946907c102ca72db158c1964a52e"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-c"
+version = "0.23.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "afd2b1bf1585dc2ef6d69e87d01db8adb059006649dd5f96f31aa789ee6e9c71"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-cpp"
+version = "0.23.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df2196ea9d47b4ab4a31b9297eaa5a5d19a0b121dceb9f118f6790ad0ab94743"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-go"
+version = "0.23.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b13d476345220dbe600147dd444165c5791bf85ef53e28acbedd46112ee18431"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-highlight"
+version = "0.24.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6411813e4a9ebc87d391b98b0f3ce65d5361cd80c54de8651d8b85b555ea5d95"
+dependencies = [
+ "lazy_static",
+ "regex",
+ "streaming-iterator",
+ "thiserror 1.0.69",
+ "tree-sitter",
+]
+
+[[package]]
+name = "tree-sitter-java"
+version = "0.23.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0aa6cbcdc8c679b214e616fd3300da67da0e492e066df01bcf5a5921a71e90d6"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-javascript"
+version = "0.23.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf40bf599e0416c16c125c3cec10ee5ddc7d1bb8b0c60fa5c4de249ad34dc1b1"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-json"
+version = "0.24.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d727acca406c0020cffc6cf35516764f36c8e3dc4408e5ebe2cb35a947ec471"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-language"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ae62f7eae5eb549c71b76658648b72cc6111f2d87d24a1e31fa907f4943e3ce"
+
+[[package]]
+name = "tree-sitter-python"
+version = "0.23.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d065aaa27f3aaceaf60c1f0e0ac09e1cb9eb8ed28e7bcdaa52129cffc7f4b04"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-rust"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4b9b18034c684a2420722be8b2a91c9c44f2546b631c039edf575ccba8c61be1"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-typescript"
+version = "0.23.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c5f76ed8d947a75cc446d5fccd8b602ebf0cde64ccf2ffa434d873d7a575eff"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
 ]
 
 [[package]]
@@ -4552,9 +4978,20 @@ name = "web-framework-markdown"
 version = "0.1.0"
 dependencies = [
  "katex-rs",
- "lazy_static",
+ "once_cell",
  "pulldown-cmark",
- "syntect",
+ "tree-sitter",
+ "tree-sitter-bash",
+ "tree-sitter-c",
+ "tree-sitter-cpp",
+ "tree-sitter-go",
+ "tree-sitter-highlight",
+ "tree-sitter-java",
+ "tree-sitter-javascript",
+ "tree-sitter-json",
+ "tree-sitter-python",
+ "tree-sitter-rust",
+ "tree-sitter-typescript",
  "web-sys",
 ]
 
@@ -4835,9 +5272,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.7.13"
+version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21a0236b59786fed61e2a80582dd500fe61f18b5dca67a4a067d0bc9039339cf"
+checksum = "5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829"
 dependencies = [
  "memchr",
 ]
@@ -4859,15 +5296,6 @@ name = "xxhash-rust"
 version = "0.8.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fdd20c5420375476fbd4394763288da7eb0cc0b8c11deed431a91562af7335d3"
-
-[[package]]
-name = "yaml-rust"
-version = "0.4.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
-dependencies = [
- "linked-hash-map",
-]
 
 [[package]]
 name = "yansi"

@@ -3,8 +3,8 @@ use core::ops::Range;
 use core::marker::PhantomData;
 use std::collections::BTreeMap;
 
-use syntect::highlighting::ThemeSet;
-use syntect::parsing::SyntaxSet;
+use once_cell::sync::Lazy;
+use tree_sitter_highlight::{HighlightConfiguration, HighlightEvent, Highlighter};
 
 use pulldown_cmark::{Alignment, CodeBlockKind, Event, Tag, TagEnd};
 
@@ -20,14 +20,205 @@ use super::{Context, ElementAttributes, HtmlError, LinkDescription, MdComponentP
 use crate::component::{ComponentCall, CustomHtmlTag, CustomHtmlTagError};
 use crate::{get_substr_range, offset_range, MdComponentAttribute};
 
-// load the default syntect options to highlight code
-lazy_static::lazy_static! {
-    static ref SYNTAX_SET: SyntaxSet = {
-        SyntaxSet::load_defaults_newlines()
+const HIGHLIGHT_NAMES: &[&str] = &[
+    "attribute",
+    "comment",
+    "constant",
+    "constant.builtin",
+    "function",
+    "function.builtin",
+    "function.macro",
+    "keyword",
+    "number",
+    "operator",
+    "property",
+    "punctuation",
+    "punctuation.bracket",
+    "punctuation.delimiter",
+    "string",
+    "type",
+    "type.builtin",
+    "variable",
+    "variable.builtin",
+    "variable.parameter",
+];
+
+fn highlight_class(index: usize) -> Option<&'static str> {
+    match HIGHLIGHT_NAMES.get(index)? {
+        &"keyword" => Some("syntax-keyword"),
+        &"string" => Some("syntax-string"),
+        &"comment" => Some("syntax-comment"),
+        &"function" | &"function.builtin" | &"function.macro" => Some("syntax-function"),
+        &"type" | &"type.builtin" => Some("syntax-type"),
+        &"number" => Some("syntax-number"),
+        &"constant" | &"constant.builtin" => Some("syntax-constant"),
+        &"operator" => Some("syntax-operator"),
+        &"variable.builtin" => Some("syntax-variable-builtin"),
+        &"attribute" => Some("syntax-attribute"),
+        &"property" => Some("syntax-property"),
+        _ => None,
+    }
+}
+
+struct LangConfig {
+    config: HighlightConfiguration,
+}
+
+impl LangConfig {
+    fn new(language: tree_sitter::Language, name: &str, highlights_query: &str) -> Self {
+        let mut config = HighlightConfiguration::new(language, name, highlights_query, "", "")
+            .expect("failed to create highlight config");
+        config.configure(HIGHLIGHT_NAMES);
+        Self { config }
+    }
+}
+
+struct HighlightConfigs {
+    rust: LangConfig,
+    bash: LangConfig,
+    python: LangConfig,
+    go: LangConfig,
+    javascript: LangConfig,
+    typescript: LangConfig,
+    tsx: LangConfig,
+    java: LangConfig,
+    c: LangConfig,
+    cpp: LangConfig,
+    json: LangConfig,
+}
+
+static CONFIGS: Lazy<HighlightConfigs> = Lazy::new(|| HighlightConfigs {
+    rust: LangConfig::new(
+        tree_sitter_rust::LANGUAGE.into(),
+        "rust",
+        tree_sitter_rust::HIGHLIGHTS_QUERY,
+    ),
+    bash: LangConfig::new(
+        tree_sitter_bash::LANGUAGE.into(),
+        "bash",
+        tree_sitter_bash::HIGHLIGHT_QUERY,
+    ),
+    python: LangConfig::new(
+        tree_sitter_python::LANGUAGE.into(),
+        "python",
+        tree_sitter_python::HIGHLIGHTS_QUERY,
+    ),
+    go: LangConfig::new(
+        tree_sitter_go::LANGUAGE.into(),
+        "go",
+        tree_sitter_go::HIGHLIGHTS_QUERY,
+    ),
+    javascript: LangConfig::new(
+        tree_sitter_javascript::LANGUAGE.into(),
+        "javascript",
+        tree_sitter_javascript::HIGHLIGHT_QUERY,
+    ),
+    typescript: LangConfig::new(
+        tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
+        "typescript",
+        tree_sitter_typescript::HIGHLIGHTS_QUERY,
+    ),
+    tsx: LangConfig::new(
+        tree_sitter_typescript::LANGUAGE_TSX.into(),
+        "tsx",
+        tree_sitter_typescript::HIGHLIGHTS_QUERY,
+    ),
+    java: LangConfig::new(
+        tree_sitter_java::LANGUAGE.into(),
+        "java",
+        tree_sitter_java::HIGHLIGHTS_QUERY,
+    ),
+    c: LangConfig::new(
+        tree_sitter_c::LANGUAGE.into(),
+        "c",
+        tree_sitter_c::HIGHLIGHT_QUERY,
+    ),
+    cpp: LangConfig::new(
+        tree_sitter_cpp::LANGUAGE.into(),
+        "cpp",
+        tree_sitter_cpp::HIGHLIGHT_QUERY,
+    ),
+    json: LangConfig::new(
+        tree_sitter_json::LANGUAGE.into(),
+        "json",
+        tree_sitter_json::HIGHLIGHTS_QUERY,
+    ),
+});
+
+fn config_for_lang(lang: &str) -> Option<&'static LangConfig> {
+    let configs = &*CONFIGS;
+    match lang {
+        "rust" | "rs" => Some(&configs.rust),
+        "bash" | "sh" | "shell" | "zsh" => Some(&configs.bash),
+        "python" | "py" => Some(&configs.python),
+        "go" | "golang" => Some(&configs.go),
+        "javascript" | "js" => Some(&configs.javascript),
+        "typescript" | "ts" => Some(&configs.typescript),
+        "tsx" | "jsx" => Some(&configs.tsx),
+        "java" => Some(&configs.java),
+        "c" | "h" => Some(&configs.c),
+        "cpp" | "cc" | "cxx" | "c++" => Some(&configs.cpp),
+        "json" => Some(&configs.json),
+        _ => None,
+    }
+}
+
+fn highlight_code(content: &str, kind: &CodeBlockKind) -> Option<String> {
+    let lang = match kind {
+        CodeBlockKind::Fenced(x) if !x.is_empty() => x.as_ref(),
+        _ => return None,
     };
-    static ref THEME_SET: ThemeSet = {
-        ThemeSet::load_defaults()
-    };
+
+    let lang_config = config_for_lang(lang)?;
+
+    let mut highlighter = Highlighter::new();
+    let highlights = highlighter
+        .highlight(&lang_config.config, content.as_bytes(), None, |_| None)
+        .ok()?;
+
+    let mut html = String::with_capacity(content.len() * 2);
+    let mut current_class: Option<&str> = None;
+
+    for event in highlights {
+        let event = event.ok()?;
+        match event {
+            HighlightEvent::Source { start, end } => {
+                let text = &content[start..end];
+                let escaped = html_escape(text);
+                if let Some(class) = current_class {
+                    html.push_str("<span class=\"");
+                    html.push_str(class);
+                    html.push_str("\">");
+                    html.push_str(&escaped);
+                    html.push_str("</span>");
+                } else {
+                    html.push_str(&escaped);
+                }
+            }
+            HighlightEvent::HighlightStart(h) => {
+                current_class = highlight_class(h.0);
+            }
+            HighlightEvent::HighlightEnd => {
+                current_class = None;
+            }
+        }
+    }
+
+    Some(html)
+}
+
+fn html_escape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            _ => out.push(c),
+        }
+    }
+    out
 }
 
 impl HtmlError {
@@ -45,30 +236,6 @@ impl HtmlError {
     }
 }
 
-/// `highlight_code(content, ss, ts)` render the content `content`
-/// with syntax highlighting
-fn highlight_code(theme_name: Option<&str>, content: &str, kind: &CodeBlockKind) -> Option<String> {
-    let lang = match kind {
-        CodeBlockKind::Fenced(x) => x,
-        CodeBlockKind::Indented => return None,
-    };
-
-    let theme_name = theme_name.unwrap_or("base16-ocean.light");
-    let theme = THEME_SET
-        .themes
-        .get(theme_name)
-        .expect("unknown theme")
-        .clone();
-
-    syntect::html::highlighted_html_for_string(
-        content,
-        &SYNTAX_SET,
-        SYNTAX_SET.find_syntax_by_token(lang)?,
-        &theme,
-    )
-    .ok()
-}
-
 /// renders a source code in a code block, with syntax highlighting if possible.
 /// `cx`: the current markdown context
 /// `source`: the source to render
@@ -84,7 +251,7 @@ fn render_code_block<'a, 'callback, F: Context<'a, 'callback>>(
         ..Default::default()
     };
 
-    match highlight_code(cx.props().theme, &source, k) {
+    match highlight_code(&source, k) {
         None => cx.el_with_attributes(
             Code,
             cx.el(Code, cx.el_text(source.into())),
